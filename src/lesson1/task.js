@@ -2,7 +2,7 @@
   Напишите функцию, которая принимает 1 аргумент и возварщает его тип
 */
 function getDataType(variable) {
-
+  return typeof variable
 }
 
 /*
@@ -14,10 +14,29 @@ function getDataType(variable) {
   'object-function' - если функция
 */
 function getDataTypePseudoName(variable) {
+  // primitives
+  if ((variable === null) || (variable == undefined)) {
+    return "primitive-special"
+  }
 
+  if (['number', 'string', 'boolean', 'Symbol'].includes(typeof variable)) {
+    return "primitive"
 }
 
+  const DataTypes = [
+    ["object-array", Array],
+    ["object-function", Function],
+    ["object", Object],
+  ]
 
+  for (const group of DataTypes) {
+    if (variable instanceof group[1]) {
+      return group[0]
+    }
+  }
+
+  throw new TypeError(`Type of ${variable} is not supported`)
+}
 /*
   Напишите функцию, которая принимает 2 аргумента,
   и возврвщает 1 если их значения и их типы равны,
@@ -25,7 +44,13 @@ function getDataTypePseudoName(variable) {
   и -1 в другом случае
 */
 function compareByType(a, b) {
-
+  if (a == b) {
+    if (typeof a == typeof b) {
+      return 1
+    }
+    return 0
+  }
+  return -1
 }
 
 // Numbers
@@ -37,7 +62,10 @@ function compareByType(a, b) {
   в любом другом случае возврвщвет -1
 */
 function increase(value) {
-
+  if (typeof value == 'number') {
+    return value + 1
+  }
+  return -1
 }
 
 /*
@@ -45,9 +73,13 @@ function increase(value) {
   и в случае если аргумент не Infinity или NaN возвращает строку 'safe' иначе 'danger'
 */
 function testForSafeNumber(value) {
-
+  if (typeof value == 'number') {
+    if (Number.isFinite(value) && !Number.isNaN(value)) {
+      return 'safe'
+    }
+  }
+  return 'danger'
 }
-
 
 
 // Strings
@@ -57,7 +89,7 @@ function testForSafeNumber(value) {
   и возвращает массив из елементов строки разделенных по пробелу ' '
 */
 function stringToArray(str) {
-
+  return str.split(' ')
 }
 
 
@@ -66,7 +98,7 @@ function stringToArray(str) {
   и возвращает часть этой строки до первой запятой
 */
 function getStringPart(str) {
-
+  return str.split(',')[0]
 }
 
 /*
@@ -75,7 +107,11 @@ function getStringPart(str) {
   false в противоположном случае
 */
 function isSingleSymbolMatch(str, symbol) {
-
+  let count = (str.match(new RegExp(symbol, "gi")) || []).length
+  if (count == 1) {
+    return str.indexOf(symbol)
+  }
+  return false
 }
 
 /*
@@ -85,7 +121,10 @@ function isSingleSymbolMatch(str, symbol) {
   или строку разделенную "-" если не задан
 */
 function join(array, separator) {
-
+  if (!separator) {
+    separator = "-"
+  }
+  return array.join(separator)
 }
 
 
@@ -94,7 +133,7 @@ function join(array, separator) {
   и возвращает один состоящий из элементов перового и второго (последовательно сначала первый потом второй)
 */
 function glue(arrA, arrB) {
-
+ return [...arrA, ...arrB]
 }
 
 
@@ -103,7 +142,7 @@ function glue(arrA, arrB) {
   и возвращает другой массив отсортированный от большего к меньшему
 */
 function order(arr) {
-
+  return arr.sort().reverse()
 }
 
 
@@ -112,7 +151,7 @@ function order(arr) {
   и возвращает другой без чисел которые меньше 0
 */
 function removeNegative(arr) {
-
+  return arr.filter((x) => {return  x >=0 })
 }
 
 /*
@@ -122,7 +161,7 @@ function removeNegative(arr) {
   [1,2,3], [1, 3] => [2]
 */
 function without(arrA, arrB) {
-
+  return arrA.filter((x) => {return !arrB.includes(x)})
 }
 
 /*
@@ -133,7 +172,11 @@ function without(arrA, arrB) {
   '12/6' => 2
 */
 function calcExpression(expression) {
-
+  try {
+    return eval(expression)
+  } catch (e) {
+    return NaN
+  }
 }
 
 /*
@@ -145,7 +188,7 @@ function calcExpression(expression) {
   '100>5' => true
 */
 function calcComparison(expression) {
-
+  return Boolean(eval(expression))
 }
 
 /*
@@ -157,7 +200,17 @@ function calcComparison(expression) {
   { a: 1, b: 2 }, '.c' => exception
 */
 function evalKey(obj, expression) {
-
+  if (!expression.startsWith(".")) {
+    throw new Error()
+  }
+  let parts = expression.split('.').filter(Boolean).map((x) => {return `['${x}']`})
+  let dict_expression = parts.join('')
+  let result = eval(`obj${dict_expression}`)
+  
+  if (result == undefined) {
+    throw new Error()
+  }
+  return result
 }
 
 export default {
