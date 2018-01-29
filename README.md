@@ -34,7 +34,7 @@ We are kindly asks you to stick to the following reexporting flow in your projec
 
 ## Scripts
 
-- `npm lint` to check the sources linting
+- `npm run lint` to check the sources linting
 - `npm run coverage` to check the tests coverage
 - `npm test` to run tests
 - `npm run debug` to run tests with debugger compatibility
