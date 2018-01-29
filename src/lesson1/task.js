@@ -188,7 +188,7 @@ function calcExpression(expression) {
   '100>5' => true
 */
 function calcComparison(expression) {
-  return Boolean(eval(expression))
+  return eval(`Boolean(${expression})`)
 }
 
 /*
