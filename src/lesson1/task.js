@@ -2,7 +2,7 @@
   Напишите функцию, которая принимает 1 аргумент и возварщает его тип
 */
 function getDataType(variable) {
-  return typeof variable
+  return typeof variable;
 }
 
 /*
@@ -15,27 +15,27 @@ function getDataType(variable) {
 */
 function getDataTypePseudoName(variable) {
   // primitives
-  if ((variable === null) || (variable == undefined)) {
-    return "primitive-special"
+  if ((variable === null) || (variable === undefined)) {
+    return 'primitive-special';
   }
 
   if (['number', 'string', 'boolean', 'Symbol'].includes(typeof variable)) {
-    return "primitive"
-}
+    return 'primitive';
+  }
 
   const DataTypes = [
-    ["object-array", Array],
-    ["object-function", Function],
-    ["object", Object],
-  ]
+    ['object-array', Array],
+    ['object-function', Function],
+    ['object', Object],
+  ];
 
-  for (const group of DataTypes) {
+  for (const group of DataTypes) { // eslint-disable-line no-restricted-syntax
     if (variable instanceof group[1]) {
-      return group[0]
+      return group[0];
     }
   }
 
-  throw new TypeError(`Type of ${variable} is not supported`)
+  throw new TypeError(`Type of ${variable} is not supported`);
 }
 /*
   Напишите функцию, которая принимает 2 аргумента,
@@ -44,13 +44,13 @@ function getDataTypePseudoName(variable) {
   и -1 в другом случае
 */
 function compareByType(a, b) {
-  if (a == b) {
-    if (typeof a == typeof b) {
-      return 1
+  if (a == b) { // eslint-disable-line eqeqeq
+    if (a === b) {
+      return 1;
     }
-    return 0
+    return 0;
   }
-  return -1
+  return -1;
 }
 
 // Numbers
@@ -62,10 +62,10 @@ function compareByType(a, b) {
   в любом другом случае возврвщвет -1
 */
 function increase(value) {
-  if (typeof value == 'number') {
-    return value + 1
+  if (typeof value === 'number') {
+    return value + 1;
   }
-  return -1
+  return -1;
 }
 
 /*
@@ -73,12 +73,12 @@ function increase(value) {
   и в случае если аргумент не Infinity или NaN возвращает строку 'safe' иначе 'danger'
 */
 function testForSafeNumber(value) {
-  if (typeof value == 'number') {
+  if (typeof value === 'number') {
     if (Number.isFinite(value) && !Number.isNaN(value)) {
-      return 'safe'
+      return 'safe';
     }
   }
-  return 'danger'
+  return 'danger';
 }
 
 
@@ -89,7 +89,7 @@ function testForSafeNumber(value) {
   и возвращает массив из елементов строки разделенных по пробелу ' '
 */
 function stringToArray(str) {
-  return str.split(' ')
+  return str.split(' ');
 }
 
 
@@ -98,7 +98,7 @@ function stringToArray(str) {
   и возвращает часть этой строки до первой запятой
 */
 function getStringPart(str) {
-  return str.split(',')[0]
+  return str.split(',')[0];
 }
 
 /*
@@ -107,24 +107,25 @@ function getStringPart(str) {
   false в противоположном случае
 */
 function isSingleSymbolMatch(str, symbol) {
-  let count = (str.match(new RegExp(symbol, "gi")) || []).length
-  if (count == 1) {
-    return str.indexOf(symbol)
+  const count = (str.match(new RegExp(symbol, 'gi')) || []).length;
+  if (count === 1) {
+    return str.indexOf(symbol);
   }
-  return false
+  return false;
 }
 
 /*
   Напишите функцию, которая принимает 2 аргумента,
   массив в разделитель[опционально],
   и возвращает строку ввиде элементов массива c разделителями если разделитель задан
-  или строку разделенную "-" если не задан
+  или строку разделенную '-' если не задан
 */
 function join(array, separator) {
-  if (!separator) {
-    separator = "-"
+  let sep = separator;
+  if (!sep) {
+    sep = '-';
   }
-  return array.join(separator)
+  return array.join(sep);
 }
 
 
@@ -133,7 +134,7 @@ function join(array, separator) {
   и возвращает один состоящий из элементов перового и второго (последовательно сначала первый потом второй)
 */
 function glue(arrA, arrB) {
- return [...arrA, ...arrB]
+  return [...arrA, ...arrB];
 }
 
 
@@ -142,7 +143,7 @@ function glue(arrA, arrB) {
   и возвращает другой массив отсортированный от большего к меньшему
 */
 function order(arr) {
-  return arr.sort().reverse()
+  return arr.sort().reverse();
 }
 
 
@@ -151,7 +152,7 @@ function order(arr) {
   и возвращает другой без чисел которые меньше 0
 */
 function removeNegative(arr) {
-  return arr.filter((x) => {return  x >=0 })
+  return arr.filter(x => x >= 0);
 }
 
 /*
@@ -161,7 +162,7 @@ function removeNegative(arr) {
   [1,2,3], [1, 3] => [2]
 */
 function without(arrA, arrB) {
-  return arrA.filter((x) => {return !arrB.includes(x)})
+  return arrA.filter(x => !arrB.includes(x));
 }
 
 /*
@@ -173,9 +174,9 @@ function without(arrA, arrB) {
 */
 function calcExpression(expression) {
   try {
-    return eval(expression)
+    return eval(expression); // eslint-disable-line no-eval
   } catch (e) {
-    return NaN
+    return NaN;
   }
 }
 
@@ -188,8 +189,8 @@ function calcExpression(expression) {
   '100>5' => true
 */
 function calcComparison(expression) {
-  // Deal with "="
-  return eval(`Boolean(${expression.replace(/\b(=)\b/, "==")})`)
+  // Deal with '='
+  return eval(`Boolean(${expression.replace(/\b(=)\b/, '==')})`); // eslint-disable-line no-eval
 }
 
 /*
@@ -201,17 +202,17 @@ function calcComparison(expression) {
   { a: 1, b: 2 }, '.c' => exception
 */
 function evalKey(obj, expression) {
-  if (!expression.startsWith(".")) {
-    throw new Error()
+  if (!expression.startsWith('.')) {
+    throw new Error();
   }
-  let parts = expression.split('.').filter(Boolean).map((x) => {return `['${x}']`})
-  let dict_expression = parts.join('')
-  let result = eval(`obj${dict_expression}`)
-  
-  if (result == undefined) {
-    throw new Error()
+  const parts = expression.split('.').filter(Boolean).map(x => `['${x}']`);
+  const dictExpression = parts.join('');
+  const result = eval(`obj${dictExpression}`); // eslint-disable-line no-eval
+
+  if (result === undefined) {
+    throw new Error();
   }
-  return result
+  return result;
 }
 
 export default {
@@ -230,5 +231,5 @@ export default {
   without,
   calcExpression,
   calcComparison,
-  evalKey
+  evalKey,
 };
