@@ -121,10 +121,7 @@ function isSingleSymbolMatch(str, symbol) {
   или строку разделенную '-' если не задан
 */
 function join(array, separator) {
-  let sep = separator;
-  if (!sep) {
-    sep = '-';
-  }
+  const sep = separator || '-';
   return array.join(sep);
 }
 
