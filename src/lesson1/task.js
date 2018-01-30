@@ -173,11 +173,20 @@ function without(arrA, arrB) {
   '12/6' => 2
 */
 function calcExpression(expression) {
-  try {
-    return eval(expression); // eslint-disable-line no-eval
-  } catch (e) {
-    return NaN;
+  // Eval way: eval(expression); // eslint-disable-line no-eval
+  const regex = /([+-]?\d+)\s*([+/*-])\s*([+-]?\d+)/g;
+  const ops = {
+    '+': (x, y) => x + y,
+    '-': (x, y) => x - y,
+    '*': (x, y) => x * y,
+    '/': (x, y) => x / y,
+  };
+  const match = regex.exec(expression);
+  if (match) {
+    const [a, op, b] = [parseInt(match[1], 10), match[2], parseInt(match[3], 10)];
+    return ops[op](a, b);
   }
+  return NaN;
 }
 
 /*
@@ -189,8 +198,21 @@ function calcExpression(expression) {
   '100>5' => true
 */
 function calcComparison(expression) {
-  // Deal with '='
-  return eval(`Boolean(${expression.replace(/\b(=)\b/, '==')})`); // eslint-disable-line no-eval
+  // Eval way: return eval(`Boolean(${expression.replace(/\b(=)\b/, '==')})`); // eslint-disable-line no-eval
+  const regex = /([+-]?\d+)\s*(=|>=|<=|>|<)\s*([+-]?\d+)/g;
+  const ops = {
+    '=': (x, y) => x === y,
+    '>': (x, y) => x > y,
+    '<': (x, y) => x < y,
+    '>=': (x, y) => x >= y,
+    '<=': (x, y) => x <= y,
+  };
+  const match = regex.exec(expression);
+  if (match) {
+    const [a, op, b] = [parseInt(match[1], 10), match[2], parseInt(match[3], 10)];
+    return ops[op](a, b);
+  }
+  throw new Error('Logical expression is incorrect');
 }
 
 /*
@@ -205,14 +227,17 @@ function evalKey(obj, expression) {
   if (!expression.startsWith('.')) {
     throw new Error();
   }
-  const parts = expression.split('.').filter(Boolean).map(x => `['${x}']`);
-  const dictExpression = parts.join('');
-  const result = eval(`obj${dictExpression}`); // eslint-disable-line no-eval
+  const parts = expression.split('.').filter(Boolean);
+  let result = obj;
 
-  if (result === undefined) {
-    throw new Error();
+  for (const part of parts) { // eslint-disable-line no-restricted-syntax
+    result = result[part];
   }
-  return result;
+
+  if (result !== undefined) {
+    return result;
+  }
+  throw new Error('Expression is wrong (most likely)');
 }
 
 export default {
