@@ -1,17 +1,17 @@
 /*
-  Write a function, that has 2 required parameters, and any amount of optional parameters. 
+  Write a function, that has 2 required parameters, and any amount of optional parameters.
   Function should return a number - amount of optional parameters that were passed into function.
   Hint: you are allowed to modify both function definition and function body.
 */
-export function countOptional() {
-
+export function countOptional(x, y, ...args) {
+  return args.length;
 }
 
 /*
   Write your implementation of native Function.prototype.bind method
 */
-export function bindContext(fn, context) {
-
+export function bindContext(fn, context, ...args) {
+  return () => fn.apply(context, args);
 }
 
 
@@ -30,7 +30,11 @@ export function bindContext(fn, context) {
   Take to account, that you should track log call index starting from 1
 */
 export function addLogCapability(object) {
-
+  let counter = 1;
+  object.log = function () { // eslint-disable-line func-names
+    const content = this.name ? `my name is ${this.name}` : 'I dont have name';
+    return `Log message #${counter++}: ${content}`; // eslint-disable-line no-plusplus
+  };
 }
 
 /*
@@ -39,14 +43,16 @@ export function addLogCapability(object) {
   myLogger('first message'); //=> My Topic: first message
 */
 export function logger(topic) {
-
+  return function (msg) { // eslint-disable-line func-names
+    return `${topic}: ${msg}`;
+  };
 }
 
 /*
   Implement left to right compose function
 */
-export function compose() {
-
+export function compose(...functions) {
+  return (...args) => functions.reduce((x, y) => y(x), ...args);
 }
 
 /*
@@ -60,7 +66,7 @@ export function compose() {
   sumWith4(5) // 9
 */
 export function partial(fn) {
-
+  return (...args) => (...finalArgs) => fn(...args, ...finalArgs);
 }
 
 export default {
@@ -69,5 +75,5 @@ export default {
   addLogCapability,
   logger,
   compose,
-  partial
+  partial,
 };
