@@ -52,7 +52,7 @@ export function logger(topic) {
   Implement left to right compose function
 */
 export function compose(...functions) {
-  return (...args) => functions.reduce((x, y) => y(x), ...args);
+  return (...args) => functions.reduce((value, func) => func(value), ...args);
 }
 
 /*
