@@ -9,7 +9,47 @@
   mySet = createSet(['a', 'b', 'c'])
 */
 export function createSet(arr) {
+  const obj = {
+    objects: [],
+    size: 0,
+  };
+  // Init
+  if (arr) {
+    arr.forEach(item => obj.objects.push(item));
+    obj.size = arr.length;
+  }
 
+  obj[Symbol.iterator] = function* () {
+    let counter = 0;
+    while (counter < this.length) {
+      yield this.objects[counter++];
+    }
+  };
+
+  obj.forEach = function (func) {
+    let counter = 0;
+    while (counter < this.size) {
+      func(this.objects[counter++]);
+    }
+  };
+
+  obj.add = function (key, value) {
+    const index = this.objects.indexOf(key);
+    if (index === -1) {
+      this.objects.push(key);
+      this.size = this.objects.length;
+    }
+  };
+
+  obj.delete = function (key) {
+    const index = this.objects.indexOf(key);
+    if (index !== -1) {
+      this.objects.splice(index, 1);
+      this.size = this.objects.length;
+    }
+  };
+
+  return obj;
 }
 
 /*
@@ -30,11 +70,11 @@ export function createMap(arr) {
   };
   // Init
   if (arr) {
-    arr.forEach((pair) => {obj.keys.push(pair[0]); obj.values.push(pair[1]);});
+    arr.forEach(pair => { obj.keys.push(pair[0]); obj.values.push(pair[1]); });
     obj.size = arr.length;
-  };
+  }
 
-  obj[Symbol.iterator] = function*() {
+  obj[Symbol.iterator] = function* () {
     let counter = 0;
     while (counter < this.length) {
       yield [this.keys[counter], this.values[counter]];
@@ -42,15 +82,15 @@ export function createMap(arr) {
     }
   };
 
-  obj.forEach = function(func) {
+  obj.forEach = function (func) {
     let counter = 0;
     while (counter < this.size) {
       func(this.keys[counter], this.values[counter]);
       counter++;
     }
-  }
+  };
 
-  obj.set = function(key, value) {
+  obj.set = function (key, value) {
     const index = this.keys.indexOf(key);
     if (index !== -1) {
       this.values[index] = value;
@@ -61,14 +101,14 @@ export function createMap(arr) {
     }
   };
 
-  obj.delete = function(key) {
+  obj.delete = function (key) {
     const index = this.keys.indexOf(key);
     if (index !== -1) {
       this.keys.splice(index, 1);
       this.values.splice(index, 1);
       this.size = this.keys.length;
     }
-  }
+  };
 
   return obj;
 }
