@@ -19,21 +19,21 @@ export function createSet(arr) {
     obj.size = arr.length;
   }
 
-  obj[Symbol.iterator] = function* () {
+  obj[Symbol.iterator] = function* () { // eslint-disable-line func-names
     let counter = 0;
     while (counter < this.length) {
-      yield this.objects[counter++];
+      yield this.objects[counter++]; // eslint-disable-line no-plusplus
     }
   };
 
-  obj.forEach = function (func) {
+  obj.forEach = function (func) { // eslint-disable-line func-names
     let counter = 0;
     while (counter < this.size) {
-      func(this.objects[counter++]);
+      func(this.objects[counter++]); // eslint-disable-line no-plusplus
     }
   };
 
-  obj.add = function (key, value) {
+  obj.add = function (key) { // eslint-disable-line func-names
     const index = this.objects.indexOf(key);
     if (index === -1) {
       this.objects.push(key);
@@ -41,7 +41,7 @@ export function createSet(arr) {
     }
   };
 
-  obj.delete = function (key) {
+  obj.delete = function (key) { // eslint-disable-line func-names
     const index = this.objects.indexOf(key);
     if (index !== -1) {
       this.objects.splice(index, 1);
@@ -74,23 +74,23 @@ export function createMap(arr) {
     obj.size = arr.length;
   }
 
-  obj[Symbol.iterator] = function* () {
+  obj[Symbol.iterator] = function* () { // eslint-disable-line func-names
     let counter = 0;
     while (counter < this.length) {
       yield [this.keys[counter], this.values[counter]];
-      counter++;
+      counter++; // eslint-disable-line no-plusplus
     }
   };
 
-  obj.forEach = function (func) {
+  obj.forEach = function (func) { // eslint-disable-line func-names
     let counter = 0;
     while (counter < this.size) {
       func(this.keys[counter], this.values[counter]);
-      counter++;
+      counter++; // eslint-disable-line no-plusplus
     }
   };
 
-  obj.set = function (key, value) {
+  obj.set = function (key, value) { // eslint-disable-line func-names
     const index = this.keys.indexOf(key);
     if (index !== -1) {
       this.values[index] = value;
@@ -101,7 +101,7 @@ export function createMap(arr) {
     }
   };
 
-  obj.delete = function (key) {
+  obj.delete = function (key) { // eslint-disable-line func-names
     const index = this.keys.indexOf(key);
     if (index !== -1) {
       this.keys.splice(index, 1);
