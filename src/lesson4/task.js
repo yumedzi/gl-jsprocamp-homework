@@ -85,7 +85,7 @@ export function createMap(arr) {
   obj.forEach = function (func) { // eslint-disable-line func-names
     let counter = 0;
     while (counter < this.size) {
-      func(this.keys[counter], this.values[counter]);
+      func(this.values[counter], this.keys[counter]);
       counter++; // eslint-disable-line no-plusplus
     }
   };
