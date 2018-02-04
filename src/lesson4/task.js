@@ -23,10 +23,57 @@ export function createSet(arr) {
   myMap = createMap([['a', 1], ['b', 2], ['c', 3]])
 */
 export function createMap(arr) {
+  const obj = {
+    keys: [],
+    values: [],
+    size: 0,
+  };
+  // Init
+  if (arr) {
+    arr.forEach((pair) => {obj.keys.push(pair[0]); obj.values.push(pair[1]);});
+    obj.size = arr.length;
+  };
 
+  obj[Symbol.iterator] = function*() {
+    let counter = 0;
+    while (counter < this.length) {
+      yield [this.keys[counter], this.values[counter]];
+      counter++;
+    }
+  };
+
+  obj.forEach = function(func) {
+    let counter = 0;
+    while (counter < this.size) {
+      func(this.keys[counter], this.values[counter]);
+      counter++;
+    }
+  }
+
+  obj.set = function(key, value) {
+    const index = this.keys.indexOf(key);
+    if (index !== -1) {
+      this.values[index] = value;
+    } else {
+      this.keys.push(key);
+      this.values.push(value);
+      this.size = this.keys.length;
+    }
+  };
+
+  obj.delete = function(key) {
+    const index = this.keys.indexOf(key);
+    if (index !== -1) {
+      this.keys.splice(index, 1);
+      this.values.splice(index, 1);
+      this.size = this.keys.length;
+    }
+  }
+
+  return obj;
 }
 
 export default {
   createSet,
-  createMap
+  createMap,
 };
