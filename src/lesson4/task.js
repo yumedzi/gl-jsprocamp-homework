@@ -51,7 +51,7 @@ export function createSet(arr) {
 
   obj.has = function (item) { // eslint-disable-line func-names
     return this.objects.includes(item);
-  }
+  };
 
   return obj;
 }
@@ -116,7 +116,7 @@ export function createMap(arr) {
 
   obj.has = function (item) { // eslint-disable-line func-names
     return this.keys.includes(item);
-  }
+  };
 
   return obj;
 }
