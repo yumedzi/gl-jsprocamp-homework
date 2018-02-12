@@ -63,7 +63,9 @@ function compareByType(a, b) {
 */
 function increase(value) {
   if (typeof value === 'number') {
-    return value + 1;
+    if (Number.isFinite(value) && !Number.isNaN(value)) {
+      return value + 1;
+    }
   }
   return -1;
 }
@@ -107,9 +109,9 @@ function getStringPart(str) {
   false в противоположном случае
 */
 function isSingleSymbolMatch(str, symbol) {
-  const count = (str.match(new RegExp(symbol, 'gi')) || []).length;
-  if (count === 1) {
-    return str.indexOf(symbol);
+  const index = str.indexOf(symbol);
+  if (index !== -1 && index === str.lastIndexOf(symbol)) {
+    return index;
   }
   return false;
 }
@@ -140,7 +142,7 @@ function glue(arrA, arrB) {
   и возвращает другой массив отсортированный от большего к меньшему
 */
 function order(arr) {
-  return arr.sort().reverse();
+  return arr.sort((a, b) => (typeof a === 'number' && typeof b === 'number') ? a - b : a > b).reverse(); // eslint-disable-line no-confusing-arrow, max-len
 }
 
 
@@ -196,7 +198,7 @@ function calcExpression(expression) {
 */
 function calcComparison(expression) {
   // Eval way: return eval(`Boolean(${expression.replace(/\b(=)\b/, '==')})`); // eslint-disable-line no-eval
-  const regex = /([+-]?\d+)\s*(=|>=|<=|>|<)\s*([+-]?\d+)/g;
+  const regex = /([+-]?\d+(?:.\d+)?)\s*(=|>=|<=|>|<)\s*([+-]?\d+(?:.\d+)?)/g;
   const ops = {
     '=': (x, y) => x === y,
     '>': (x, y) => x > y,
@@ -206,7 +208,7 @@ function calcComparison(expression) {
   };
   const match = regex.exec(expression);
   if (match) {
-    const [a, op, b] = [parseInt(match[1], 10), match[2], parseInt(match[3], 10)];
+    const [a, op, b] = [parseFloat(match[1], 10), match[2], parseFloat(match[3], 10)];
     return ops[op](a, b);
   }
   throw new Error('Logical expression is incorrect');
@@ -224,7 +226,7 @@ function evalKey(obj, expression) {
   if (!expression.startsWith('.')) {
     throw new Error();
   }
-  const parts = expression.split('.').filter(Boolean);
+  const parts = expression.replace(/ /g, '').split('.').filter(Boolean);
   let result = obj;
 
   for (const part of parts) { // eslint-disable-line no-restricted-syntax
