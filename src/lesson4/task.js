@@ -11,12 +11,13 @@
 export function createSet(arr) {
   const obj = {
     objects: [],
-    size: 0,
+    get size() {
+      return this.objects.length;
+    },
   };
   // Init
   if (arr) {
     arr.forEach(item => obj.objects.push(item));
-    obj.size = arr.length;
   }
 
   obj[Symbol.iterator] = function* () { // eslint-disable-line func-names
@@ -37,7 +38,6 @@ export function createSet(arr) {
     const index = this.objects.indexOf(key);
     if (index === -1) {
       this.objects.push(key);
-      this.size = this.objects.length;
     }
   };
 
@@ -45,7 +45,6 @@ export function createSet(arr) {
     const index = this.objects.indexOf(key);
     if (index !== -1) {
       this.objects.splice(index, 1);
-      this.size = this.objects.length;
     }
   };
 
@@ -70,17 +69,18 @@ export function createMap(arr) {
   const obj = {
     keys: [],
     values: [],
-    size: 0,
+    get size() {
+      return this.keys.length;
+    },
   };
   // Init
   if (arr) {
     arr.forEach(pair => { obj.keys.push(pair[0]); obj.values.push(pair[1]); });
-    obj.size = arr.length;
   }
 
   obj[Symbol.iterator] = function* () { // eslint-disable-line func-names
     let counter = 0;
-    while (counter < this.length) {
+    while (counter < this.size) {
       yield [this.keys[counter], this.values[counter]];
       counter++; // eslint-disable-line no-plusplus
     }
@@ -101,7 +101,6 @@ export function createMap(arr) {
     } else {
       this.keys.push(key);
       this.values.push(value);
-      this.size = this.keys.length;
     }
   };
 
@@ -110,7 +109,6 @@ export function createMap(arr) {
     if (index !== -1) {
       this.keys.splice(index, 1);
       this.values.splice(index, 1);
-      this.size = this.keys.length;
     }
   };
 
