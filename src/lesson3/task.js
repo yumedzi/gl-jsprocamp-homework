@@ -11,7 +11,7 @@ export function countOptional(x, y, ...args) {
   Write your implementation of native Function.prototype.bind method
 */
 export function bindContext(fn, context, ...args) {
-  return () => fn.apply(context, args);
+  return (...finalArgs) => fn.apply(context, args, finalArgs);
 }
 
 
